@@ -39,7 +39,9 @@ const registerSchema = z.object({
 });
 
 const SignUpForm = () => {
+  /*constante criado para gerenciar a rota ou seja a navegação apos criar o usuario*/
   const router = useRouter();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
