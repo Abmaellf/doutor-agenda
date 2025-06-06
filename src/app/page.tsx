@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
+import AuthenticationPage from "./authentication/page";
 
 export default function Home() {
-  return <Button> Bootcamp </Button>;
+  return <AuthenticationPage />;
 }
