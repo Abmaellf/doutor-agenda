@@ -27,16 +27,18 @@ export const auth = betterAuth({
           clinic: true,
         },
       });
-      // TODO Ao adaptar para o usuário ter multiplas clinicas, deve-se mudar esse código para retornar todas as clinicas
-      const clinic = clinics[0];
+      // TODO Ao a   daptar para o usuário ter multiplas clinicas, deve-se mudar esse código para retornar todas as clinicas
+      const clinic = clinics?.[0];
 
       return {
         user: {
           ...user,
-          clinic: {
-            id: clinic.clinicId,
-            name: clinic.clinic.name,
-          },
+          clinic: clinic?.clinicId
+            ? {
+                id: clinic?.clinicId,
+                name: clinic?.clinic.name,
+              }
+            : undefined,
         },
         session,
       };
