@@ -1,10 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
+import { toast } from "sonner";
 import z from "zod";
 
+import { upsertDoctor } from "@/actions/upsert-doctor";
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
@@ -39,17 +42,15 @@ const formSchema = z
     name: z.string().min(1, {
       message: "Nome é obrigatório",
     }),
-    specialization: z
-      .string()
-      .min(1, { message: "Especialização é obrigatória" }),
+    specialty: z.string().min(1, { message: "Especialização é obrigatória" }),
     appointmentPrice: z
       .number()
       .min(1, { message: "Preço da consulta é obrigatório" }),
 
-    availableFromWeekDay: z.string().min(1, {
+    availableFromWeekday: z.string().min(1, {
       message: "Dia da semana disponível é obrigatório",
     }),
-    availableToWeekDay: z.string(),
+    availableToWeekday: z.string(),
     availableFromTime: z.string().min(1, {
       message: "Horário de início é obrigatório",
     }),
@@ -66,23 +67,41 @@ const formSchema = z
       path: ["availableToTime"],
     },
   );
+interface UpsertDoctorFormProps {
+  onSuccess?: () => void;
+}
 
-const UpsertDoctorForm = () => {
+export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      specialization: "",
+      specialty: "",
       appointmentPrice: 0,
-      availableFromWeekDay: "1",
-      availableToWeekDay: "5",
+      availableFromWeekday: "1",
+      availableToWeekday: "5",
       availableFromTime: "",
       availableToTime: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const upsertDoctorAction = useAction(upsertDoctor, {
+    onSuccess: () => {
+      toast.success("Médico adicionado com sucesso");
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error("Erro ao adicionar médico");
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    upsertDoctorAction.execute({
+      ...values,
+      availableFromWeekday: parseInt(values.availableFromWeekday),
+      availableToWeekday: parseInt(values.availableToWeekday),
+      appointmentPriceInCents: values.appointmentPrice * 100,
+    });
   };
 
   return (
@@ -111,7 +130,7 @@ const UpsertDoctorForm = () => {
 
           <FormField
             control={form.control}
-            name="specialization"
+            name="specialty"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Especialidade</FormLabel>
@@ -166,7 +185,7 @@ const UpsertDoctorForm = () => {
 
           <FormField
             control={form.control}
-            name="availableFromWeekDay"
+            name="availableFromWeekday"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Dia inicial de disponibilidade</FormLabel>
@@ -197,7 +216,7 @@ const UpsertDoctorForm = () => {
 
           <FormField
             control={form.control}
-            name="availableToWeekDay"
+            name="availableToWeekday"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Dia final de disponibilidade</FormLabel>
@@ -308,12 +327,12 @@ const UpsertDoctorForm = () => {
             )}
           />
           <DialogFooter>
-            <Button type="submit">Adicionar</Button>
+            <Button type="submit" disabled={upsertDoctorAction.isPending}>
+              {upsertDoctorAction.isPending ? "Adicionando..." : "Adicionar"}
+            </Button>
           </DialogFooter>
         </form>
       </Form>
     </DialogContent>
   );
 };
-
-export default UpsertDoctorForm;
