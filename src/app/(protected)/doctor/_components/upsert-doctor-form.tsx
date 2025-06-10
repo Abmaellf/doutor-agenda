@@ -80,8 +80,8 @@ export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
       appointmentPrice: 0,
       availableFromWeekday: "1",
       availableToWeekday: "5",
-      availableFromTime: "",
-      availableToTime: "",
+      availableFromTime: "07:00",
+      availableToTime: "19:00",
     },
   });
 
@@ -102,6 +102,7 @@ export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
       availableToWeekday: parseInt(values.availableToWeekday),
       appointmentPriceInCents: values.appointmentPrice * 100,
     });
+    console.log({ ...values });
   };
 
   return (
@@ -263,20 +264,20 @@ export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Manhã</SelectLabel>
-                      <SelectItem value="07:00">07:00</SelectItem>
-                      <SelectItem value="08:00">08:00</SelectItem>
-                      <SelectItem value="09:00">09:00</SelectItem>
-                      <SelectItem value="10:00">10:00</SelectItem>
-                      <SelectItem value="11:00">11:00</SelectItem>
+                      <SelectItem value="07:00:00">07:00</SelectItem>
+                      <SelectItem value="08:00:00">08:00</SelectItem>
+                      <SelectItem value="09:00:00">09:00</SelectItem>
+                      <SelectItem value="10:00:00">10:00</SelectItem>
+                      <SelectItem value="11:00:00">11:00</SelectItem>
                     </SelectGroup>
                     <SelectGroup>
                       <SelectLabel>Tarde</SelectLabel>
-                      <SelectItem value="14:00">14:00</SelectItem>
-                      <SelectItem value="15:00">15:00</SelectItem>
-                      <SelectItem value="16:00">16:00</SelectItem>
-                      <SelectItem value="17:00">17:00</SelectItem>
-                      <SelectItem value="18:00">18:00</SelectItem>
-                      <SelectItem value="19:00">19:00</SelectItem>
+                      <SelectItem value="14:00:00">14:00</SelectItem>
+                      <SelectItem value="15:00:00">15:00</SelectItem>
+                      <SelectItem value="16:00:00">16:00</SelectItem>
+                      <SelectItem value="17:00:00">17:00</SelectItem>
+                      <SelectItem value="18:00:00">18:00</SelectItem>
+                      <SelectItem value="19:00:00">19:00</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -304,20 +305,20 @@ export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Manhã</SelectLabel>
-                      <SelectItem value="07:00">07:00</SelectItem>
-                      <SelectItem value="08:00">08:00</SelectItem>
-                      <SelectItem value="09:00">09:00</SelectItem>
-                      <SelectItem value="10:00">10:00</SelectItem>
-                      <SelectItem value="11:00">11:00</SelectItem>
+                      <SelectItem value="07:00:00">07:00</SelectItem>
+                      <SelectItem value="08:00:00">08:00</SelectItem>
+                      <SelectItem value="09:00:00">09:00</SelectItem>
+                      <SelectItem value="10:00:00">10:00</SelectItem>
+                      <SelectItem value="11:00:00">11:00</SelectItem>
                     </SelectGroup>
                     <SelectGroup>
                       <SelectLabel>Tarde</SelectLabel>
-                      <SelectItem value="14:00">14:00</SelectItem>
-                      <SelectItem value="15:00">15:00</SelectItem>
-                      <SelectItem value="16:00">16:00</SelectItem>
-                      <SelectItem value="17:00">17:00</SelectItem>
-                      <SelectItem value="18:00">18:00</SelectItem>
-                      <SelectItem value="19:00">19:00</SelectItem>
+                      <SelectItem value="14:00:00">14:00</SelectItem>
+                      <SelectItem value="15:00:00">15:00</SelectItem>
+                      <SelectItem value="16:00:00">16:00</SelectItem>
+                      <SelectItem value="17:00:00">17:00</SelectItem>
+                      <SelectItem value="18:00:00">18:00</SelectItem>
+                      <SelectItem value="19:00:00">19:00</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
