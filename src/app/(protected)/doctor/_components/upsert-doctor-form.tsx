@@ -80,8 +80,8 @@ export const UpsertDoctorForm = ({ onSuccess }: UpsertDoctorFormProps) => {
       appointmentPrice: 0,
       availableFromWeekday: "1",
       availableToWeekday: "5",
-      availableFromTime: "07:00",
-      availableToTime: "19:00",
+      availableFromTime: "07:00:00",
+      availableToTime: "19:00:00",
     },
   });
 
