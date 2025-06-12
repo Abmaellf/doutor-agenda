@@ -1,8 +1,23 @@
 "use client";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { CalendarIcon, ClockIcon, DollarSignIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
+import { toast } from "sonner";
 
+import { deleteDoctor } from "@/actions/delete-doctor";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -22,6 +37,20 @@ interface DoctorCardProps {
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
   const [isUpsertDoctorDialogOpen, setIsUpsertDoctorDialogOpen] =
     useState(false);
+
+  const deleteDoctorAction = useAction(deleteDoctor, {
+    onSuccess: () => {
+      toast.success("Médico deletado com sucesso");
+    },
+    onError: () => {
+      toast.error("Erro ao deletar médico");
+    },
+  });
+
+  const handleDeleteDoctorClick = () => {
+    if (!doctor) return;
+    deleteDoctorAction.execute({ id: doctor.id });
+  };
   const doctorInitials = doctor.name
     .split(" ")
     .map((name) => name[0])
@@ -60,7 +89,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
         </Badge>
 
         <Separator />
-        <CardFooter>
+        <CardFooter className="flex flex-col gap-2">
           <Dialog
             open={isUpsertDoctorDialogOpen}
             onOpenChange={setIsUpsertDoctorDialogOpen}
@@ -77,6 +106,32 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
               onSuccess={() => setIsUpsertDoctorDialogOpen(false)}
             />
           </Dialog>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full">
+                <TrashIcon />
+                Deletar Médico
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Tem certeza que deseja deletar esse médico?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Essa ação não pode ser revertida. Isso irá deletar o médico e
+                  todas as consultas agendadas.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteDoctorClick}>
+                  Deletar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardFooter>
       </CardContent>
     </Card>
