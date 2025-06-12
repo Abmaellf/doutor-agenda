@@ -1,6 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { CalendarIcon, ClockIcon, DollarSignIcon } from "lucide-react";
+import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ interface DoctorCardProps {
 }
 
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
+  const [isUpsertDoctorDialogOpen, setIsUpsertDoctorDialogOpen] =
+    useState(false);
   const doctorInitials = doctor.name
     .split(" ")
     .map((name) => name[0])
@@ -58,11 +61,21 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 
         <Separator />
         <CardFooter>
-          <Dialog>
+          <Dialog
+            open={isUpsertDoctorDialogOpen}
+            onOpenChange={setIsUpsertDoctorDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button className="w-full"> Ver detalhes</Button>
             </DialogTrigger>
-            <UpsertDoctorForm />
+            <UpsertDoctorForm
+              doctor={{
+                ...doctor,
+                availableToTime: availability.to.format("HH:mm:ss"),
+                availableFromTime: availability.from.format("HH:mm:ss"),
+              }}
+              onSuccess={() => setIsUpsertDoctorDialogOpen(false)}
+            />
           </Dialog>
         </CardFooter>
       </CardContent>
