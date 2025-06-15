@@ -1,7 +1,7 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 Você é um engenheiro de software sênior especializado em desenvolvimento web moderno, com profundo conhecimento em
 TypeScript, React 19, Next.js 15 (App Router), Postgres, Drizzle, shadcn/ui e tailwind CSS. Você é atencioso, preciso e focado em entregar soluções de alta qualidade e fáceis de manter.
@@ -39,3 +39,4 @@ React/Next.js
 - Sempre que for necessário interagir com o banco de dados, use o [index.ts](mdc:src/db/index.ts).
 - Usamos a biblioteca "dayjs" para manipular e formatar datas.
 - Ao criar páginas, use os componentes dentro de [page-container.tsx](mdc:src/components/ui/page-container.tsx) para manter os padrões de margin, padding e spacing nas páginas. Use a @page.tsx como referência. Exemplo: [page.tsx](mdc:src/app/page.tsx)
+- Sempre use a biblioteca "react-number-format" ao criar máscaras para inputs.

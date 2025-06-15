@@ -1,11 +1,20 @@
 import { desc } from "drizzle-orm";
 
-import { PageContainer } from "@/components/ui/page-container";
+import { DataTable } from "@/components/ui/data-table";
+import {
+  PageAction,
+  PageContainer,
+  PageContent,
+  PageDescription,
+  PageHeader,
+  PageHeaderContent,
+  PageTitle,
+} from "@/components/ui/page-container";
 import { db } from "@/db";
 import { patientsTable } from "@/db/schema";
 
 import { AddPatientButton } from "./_components/add-patient-button";
-import { PatientCard } from "./_components/patient-card";
+import { patientsTableColumns } from "./_components/table-columns";
 
 export default async function PatientsPage() {
   const patients = await db.query.patientsTable.findMany({
@@ -14,16 +23,21 @@ export default async function PatientsPage() {
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Pacientes</h1>
-        <AddPatientButton />
-      </div>
+      <PageHeader>
+        <PageHeaderContent>
+          <PageTitle>Pacientes</PageTitle>
+          <PageDescription>
+            Gerencie os pacientes da sua clínica
+          </PageDescription>
+        </PageHeaderContent>
+        <PageAction>
+          <AddPatientButton />
+        </PageAction>
+      </PageHeader>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {patients.map((patient) => (
-          <PatientCard key={patient.id} patient={patient} />
-        ))}
-      </div>
+      <PageContent>
+        <DataTable columns={patientsTableColumns} data={patients} />
+      </PageContent>
     </PageContainer>
   );
 }
