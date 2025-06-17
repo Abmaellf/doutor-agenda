@@ -1,4 +1,5 @@
 export enum MedicalSpecialty {
+  FISIOTERAPIA = "Fisioterapia",
   ALERGOLOGIA = "Alergologia",
   ANESTESIOLOGIA = "Anestesiologia",
   ANGIOLOGIA = "Angiologia",

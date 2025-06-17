@@ -44,6 +44,7 @@ const formSchema = z.object({
 
 interface UpsertPatientFormProps {
   isOpen: boolean;
+
   patient?: typeof patientsTable.$inferSelect;
   onSuccess?: () => void;
 }
@@ -54,6 +55,7 @@ export const UpsertPatientForm = ({
   isOpen,
 }: UpsertPatientFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
+    shouldUnregister: true,
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: patient?.name ?? "",
