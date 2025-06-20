@@ -173,7 +173,6 @@ export const appointmentsTable = pgTable("appointments", {
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date()),
-  priceInCents: integer("price_in_cents").notNull(),
 });
 
 export const appointmentsTableRelations = relations(

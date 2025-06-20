@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-import { upsertAppointment } from "@/actions/upsert-appointment";
+import { addAppointment } from "@/actions/add-appointment";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -52,19 +52,19 @@ const formSchema = z.object({
   time: z.string().min(1, "Horário é obrigatório"),
 });
 
-interface UpsertAppointmentFormProps {
+interface AddAppointmentFormProps {
   isOpen: boolean;
   patients: (typeof patientsTable.$inferSelect)[];
   doctors: (typeof doctorsTable.$inferSelect)[];
   onSuccess?: () => void;
 }
 
-export const UpsertAppointmentForm = ({
+export const AddAppointmentForm = ({
   patients,
   doctors,
   onSuccess,
   isOpen,
-}: UpsertAppointmentFormProps) => {
+}: AddAppointmentFormProps) => {
   const [date, setDate] = useState<Date>();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -113,7 +113,7 @@ export const UpsertAppointmentForm = ({
     (doctor) => doctor.id === form.watch("doctorId"),
   );
 
-  const upsertAppointmentAction = useAction(upsertAppointment, {
+  const upsertAppointmentAction = useAction(addAppointment, {
     onSuccess: () => {
       toast.success("Agendamento criado com sucesso");
       onSuccess?.();
@@ -135,7 +135,8 @@ export const UpsertAppointmentForm = ({
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     upsertAppointmentAction.execute({
       ...values,
-      appointmentPriceInCents: values.appointmentPrice * 100,
+      appointmentPriceInCents: selectedDoctor?.appointmentPriceInCents ?? 0,
+      status: "pending",
     });
   };
   /* Do video foi feito de outra forma, dessa forma abaixo */

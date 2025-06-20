@@ -2,6 +2,7 @@ import { desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { DataTable } from "@/components/ui/data-table";
 import {
   PageAction,
   PageContainer,
@@ -12,10 +13,11 @@ import {
   PageTitle,
 } from "@/components/ui/page-container";
 import { db } from "@/db";
-import { doctorsTable, patientsTable } from "@/db/schema";
+import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { AddAppointmentButton } from "./_components/add-appointment-button";
+import { appointmentsTableColumns } from "./_components/table-columns";
 
 export default async function AppointmentsPage() {
   const session = await auth.api.getSession({
@@ -28,6 +30,15 @@ export default async function AppointmentsPage() {
   if (!session.user.clinic) {
     redirect("/clinics-form");
   }
+
+  const appointments = await db.query.appointmentsTable.findMany({
+    where: eq(appointmentsTable.clinicId, session.user.clinic.id),
+    with: {
+      patient: true,
+      doctor: true,
+    },
+    orderBy: [desc(appointmentsTable.date)],
+  });
 
   const patients = await db.query.patientsTable.findMany({
     where: eq(patientsTable.clinicId, session.user.clinic.id),
@@ -54,9 +65,7 @@ export default async function AppointmentsPage() {
       </PageHeader>
 
       <PageContent>
-        <div className="text-muted-foreground text-center">
-          Lista de agendamentos será implementada em breve
-        </div>
+        <DataTable columns={appointmentsTableColumns} data={appointments} />
       </PageContent>
     </PageContainer>
   );
