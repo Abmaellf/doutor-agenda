@@ -40,6 +40,18 @@ export default async function AppointmentsPage() {
     orderBy: [desc(appointmentsTable.date)],
   });
 
+  const [patients, doctors] = await Promise.all([
+    db.query.patientsTable.findMany({
+      where: eq(patientsTable.clinicId, session.user.clinic.id),
+      orderBy: [desc(patientsTable.createdAt)],
+    }),
+    db.query.doctorsTable.findMany({
+      where: eq(doctorsTable.clinicId, session.user.clinic.id),
+      orderBy: [desc(doctorsTable.createdAt)],
+    }),
+  ]);
+
+  /*
   const patients = await db.query.patientsTable.findMany({
     where: eq(patientsTable.clinicId, session.user.clinic.id),
     orderBy: [desc(patientsTable.createdAt)],
@@ -49,6 +61,7 @@ export default async function AppointmentsPage() {
     where: eq(doctorsTable.clinicId, session.user.clinic.id),
     orderBy: [desc(doctorsTable.createdAt)],
   });
+  */
 
   return (
     <PageContainer>
