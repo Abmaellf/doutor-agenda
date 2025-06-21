@@ -152,6 +152,24 @@ export const AddAppointmentForm = ({
       status: "pending",
     });
   };
+
+  const isDateAvailable = (date: Date) => {
+    if (!selectedDoctorId) return false;
+
+    const selectedDoctor = doctors.find(
+      (doctor) => doctor.id === selectedDoctorId,
+    );
+
+    if (!selectedDoctor) return false;
+
+    const dayOfWeek = dayjs(date).day();
+
+    return (
+      dayOfWeek >= selectedDoctor?.availableFromWeekday &&
+      dayOfWeek <= selectedDoctor?.availableToWeekday
+    );
+  };
+
   /* Do video foi feito de outra forma, dessa forma abaixo */
   // const isPatientAndDoctorSelected =     form.watch("patientId") && form.watch("doctorId");
 
@@ -265,7 +283,9 @@ export const AddAppointmentForm = ({
                       mode="single"
                       selected={date}
                       onSelect={setDate}
-                      disabled={(date) => date < new Date()}
+                      disabled={(date) =>
+                        date < new Date() || !isDateAvailable(date)
+                      }
                       initialFocus
                       locale={ptBR}
                     />
