@@ -294,8 +294,12 @@ export const AddAppointmentForm = ({
                   </FormControl>
                   <SelectContent>
                     {availableTimes?.data?.map((time) => (
-                      <SelectItem key={time.value} value={time.value}>
-                        {time.label}
+                      <SelectItem
+                        key={time.value}
+                        value={time.value}
+                        disabled={!time.available}
+                      >
+                        {time.label} {!time.available && "(Indisponível)"}
                       </SelectItem>
                     ))}
                   </SelectContent>
